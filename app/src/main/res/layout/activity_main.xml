@@ -6,8 +6,20 @@
     android:layout_height="match_parent"
     tools:context="com.tollgroup.controltower.MainActivity">
 
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="sendMessage"
+        android:text="@string/button"
+        android:scaleType="centerCrop"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="-1dp" />
+
     <ListView
         android:id="@+id/ListView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="48dp"
+        tools:layout_editor_absoluteX="-16dp" />
 </android.support.constraint.ConstraintLayout>

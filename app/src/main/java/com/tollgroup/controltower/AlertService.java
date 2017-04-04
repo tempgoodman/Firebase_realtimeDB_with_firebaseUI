@@ -29,22 +29,34 @@ import com.tollgroup.controltower.R;
 public class AlertService  extends Service {
     Context context;
     private FirebaseDatabase db;
+    private boolean mRunning;
+    private String lastKey = null;
+
     static String TAG = "FirebaseService";
     @Override
     public void onCreate() {
         super.onCreate();
         context = this;
         db = FirebaseDatabase.getInstance();
+        mRunning = false;
         setupNotificationListener();
     }
     private void setupNotificationListener() {
     //create listener  to listen the DB change
-        db.getReference().child("USERS")
+        db.getReference().keepSynced(true);
+        db.getReference().child("ServerStatus").orderByChild("Timestamp").limitToLast(1)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         if(dataSnapshot != null){
-                            showNotification(context,"user","testing");
+                            if (lastKey == null) {
+                                lastKey = dataSnapshot.getKey();
+                            }
+                            else {
+                                ServerStatusLog log = dataSnapshot.getValue(ServerStatusLog.class);
+                                lastKey = dataSnapshot.getKey();
+                                showNotification(context, log.getLogDetail(), log.getTimestamp());
+                            }
                         }
                     }
                     @Override
@@ -67,7 +79,12 @@ public class AlertService  extends Service {
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return Service.START_STICKY;
+        if (!mRunning) {
+            mRunning = true;
+            return Service.START_STICKY;
+            // do something
+        }
+        return super.onStartCommand(intent, flags, startId);
     }
     @Override
     public IBinder onBind(Intent intent) {
@@ -76,14 +93,15 @@ public class AlertService  extends Service {
     }
     @Override
     public void onDestroy() {
+        mRunning = false;
         super.onDestroy();
     }
-    private void showNotification(Context context, String notification, String notification_key){
+    private void showNotification(Context context, String notification, String key){
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("description")
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle(key)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setContentText("content")
+                .setContentText(notification)
                 .setAutoCancel(false);
         Intent backIntent = new Intent(context, MainActivity.class);
         backIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
