@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -97,23 +99,26 @@ public class AlertService  extends Service {
         super.onDestroy();
     }
     private void showNotification(Context context, String notification, String key){
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle(key)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setContentText(notification)
-                .setAutoCancel(false);
-        Intent backIntent = new Intent(context, MainActivity.class);
+                .setSound(defaultSoundUri)
+                .setVibrate(new long[] {10000,10000,10000,5000,5000})
+                .setAutoCancel(true);
+        Intent backIntent = new Intent(context, FirebasePaging.class);
         backIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, FirebasePaging.class);
         /*  Use the notification type to switch activity to stack on the main activity*/
         if(1==1){
-            intent = new Intent(context, MainActivity.class);
+            intent = new Intent(context, FirebasePaging.class);
         }
         final PendingIntent pendingIntent = PendingIntent.getActivities(context, 900,
                 new Intent[] {backIntent}, PendingIntent.FLAG_ONE_SHOT);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addParentStack(FirebasePaging.class);
         mBuilder.setContentIntent(pendingIntent);
         NotificationManager mNotificationManager =  (NotificationManager)context. getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(1, mBuilder.build());

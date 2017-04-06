@@ -7,14 +7,53 @@
     card_view:cardCornerRadius="4dp"
     android:layout_margin="5dp">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        android:padding="6dip">
+
         <TextView
-            android:id="@+id/logdetail"
+            android:id="@+id/display_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="14dp" />
+
+        <ImageView
+            android:id="@+id/alert_type"
+            android:layout_width="96dip"
+            android:layout_height="96dip"
+            android:layout_below="@id/display_time"
+            android:layout_marginRight="2dip"
+            />
+        <TextView
+            android:id="@+id/server_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/alert_type"
+            android:layout_below="@id/display_time"
             android:gravity="center_vertical"
-            android:textSize="14dp"/>
-    </LinearLayout>
-    </android.support.v7.widget.CardView>
+            android:textSize="14dp" />
+        <TextView
+            android:id="@+id/alert_detail"
+            android:layout_width="fill_parent"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/server_name"
+            android:layout_toRightOf="@id/alert_type"
+            android:gravity="center_vertical"
+            android:textSize="14dp" />
+
+
+        <TextView
+            android:id="@+id/alert_status"
+            android:layout_width="fill_parent"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/alert_detail"
+            android:layout_toRightOf="@id/alert_type"
+            android:gravity="center_vertical"
+            android:textSize="14dp" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

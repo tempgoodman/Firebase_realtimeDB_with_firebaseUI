@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">controltower</string>
+    <string name="app_name">Control Tower</string>
     <string name="button">Change to paging</string>
     <string name="button1">back</string>
 </resources>

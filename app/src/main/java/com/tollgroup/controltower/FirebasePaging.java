@@ -39,13 +39,14 @@ public class FirebasePaging extends AppCompatActivity {
     private ArrayList<ServerStatusLog> allServerStatusLog;
     private RCPagingAdapter adapter;
     private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.paging);
         context = this.context;
         db = FirebaseDatabase.getInstance();
-        mRecyclerView = (RecyclerView)findViewById(R.id.receyclerview);
+        mRecyclerView = (RecyclerView) findViewById(R.id.receyclerview);
         allServerStatusLog = new ArrayList<ServerStatusLog>();
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -55,47 +56,49 @@ public class FirebasePaging extends AppCompatActivity {
 
 //Get Data from Firebase realtime DB
 //        DatabaseReference dbf = FirebaseDatabase.getInstance().getReferenceFromUrl("https://fir-a0f69.firebaseio.com");
- //       dbf = FirebaseDatabase.getInstance().getReference();
- //       Query mQuery = dbf.child("ServerStatus").orderByChild("Timestamp").limitToLast(20);
- //       mQuery.addChildEventListener(new ChildEventListener() {
+        //       dbf = FirebaseDatabase.getInstance().getReference();
+        //       Query mQuery = dbf.child("ServerStatus").orderByChild("Timestamp").limitToLast(20);
+        //       mQuery.addChildEventListener(new ChildEventListener() {
         db.getReference().child("ServerStatus").orderByChild("Timestamp").limitToLast(30)
                 .addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 /*for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                     ServerStatusLog ssl = singleSnapshot.getValue(ServerStatusLog.class);
                     allServerStatusLog.add(ssl);
                 }*/
-                ServerStatusLog ssl = dataSnapshot.getValue(ServerStatusLog.class);
-                allServerStatusLog.add(0,ssl);
-                adapter = new RCPagingAdapter(context, allServerStatusLog);
+                        ServerStatusLog ssl = dataSnapshot.getValue(ServerStatusLog.class);
+                        allServerStatusLog.add(0, ssl);
+                        adapter = new RCPagingAdapter(context, allServerStatusLog);
 
-                mRecyclerView.setAdapter(adapter);
-            }
+                        mRecyclerView.setAdapter(adapter);
+                    }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            }
+                    }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            }
+                 }
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            }
+                    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                    }
+                });
+        intent = new Intent(FirebasePaging.this, AlertService.class);
+        startService(intent);
     }
-    public void sendMessage(View view)
-    {
+
+    public void sendMessage(View view) {
         Intent intent1 = new Intent(FirebasePaging.this, MainActivity.class);
         startActivity(intent1);
     }
